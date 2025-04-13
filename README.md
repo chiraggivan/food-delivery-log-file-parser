@@ -18,7 +18,7 @@ The error logging system uses a CloudWatch subscription filter to capture error 
 
 Below is the architecture diagram for the error logging addition, integrated with the original pipeline:
 
-![Error Logging Architecture Diagram](https://github.com/chiraggivan/DE-food-delivery-error-logging/blob/main/images/architecture_diagram.png)
+![Error Logging Architecture Diagram](/src/architecture.png)
 
 1. **Original Pipeline**:
    - The `RDStoS3function` Lambda function extracts data from MySQL (RDS) and uploads it to S3, triggered every 4 hours by EventBridge.
