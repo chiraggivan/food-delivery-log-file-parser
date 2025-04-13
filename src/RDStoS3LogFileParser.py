@@ -37,8 +37,18 @@ def lambda_handler(event, context):
     # If there are messages, save them to S3
     if messages:
         formatted_log = "\n".join(messages)  # Newline-separated logs
-        timestamp = datetime.utcnow().strftime('%Y%m%d_%H%M%S')
-        s3_key = f"error_warning_logs/summary_{timestamp}.txt"
+       
+       # Check if the file exists in S3
+        try:
+            # Download existing file
+            s3_client.download_file(ERROR_BUCKET_NAME, ERROR_LOG_FILE, '/tmp/error_warning_log.txt')
+            with open('/tmp/error_warning_log.txt', 'r') as f:
+                existing_log = f.read()
+            # Append new logs
+            updated_log = existing_log + formatted_log
+        except s3_client.exceptions.NoSuchKey:
+            # If file doesn't exist, use the new log
+            updated_log = formatted_log
 
         s3_client.put_object(
             Bucket='rds-to-s3-log-summaries-bucket',
